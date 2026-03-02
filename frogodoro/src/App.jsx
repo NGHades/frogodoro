@@ -1,57 +1,45 @@
 import NavBar from "./components/Navbar";
 import Timer from "./components/Timer";
-import PlayButton from "./components/PlayButton"
+import PlayButton from "./components/PlayButton";
 import RefreshButton from "./components/RefreshButton";
 import VolumeButton from "./components/VolumeButton";
 import SettingsButton from "./components/SettingsButton";
 import Settings from "./components/Settings";
-import riverLandscape from "./assets/riverLandscape.jpg"
-import swamp from "./assets/swamp.gif"
-import {useState} from 'react';
+import riverLandscape from "./assets/riverLandscape.jpg";
+import swamp from "./assets/swamp.gif";
+import { useState } from "react";
 
 function App() {
-
-  const [showSettings, setShowSettings] = useState(false);
-
   return (
     <main>
       {/* Main Timer Section - Full Screen */}
-      <div
-        className="min-h-screen w-full bg-[url(./assets/riverLandscape.jpg)] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center gap-12 px-4"
-      >
+      <div className="min-h-screen w-full bg-[url(./assets/riverLandscape.jpg)] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center gap-12 px-4">
         <h1 className="flex flex-row text-7xl font-bold font-jersey drop-shadow-2xl">
-          <div className="text-frogGreen bg-frogWhite rounded-l-2xl p-4">FROG</div>
-          <div className="text-frogWhite bg-frogGreen rounded-r-2xl p-4">ODORO</div>
+          <div className="text-frogGreen bg-frogWhite rounded-l-2xl p-4">
+            FROG
+          </div>
+          <div className="text-frogWhite bg-frogGreen rounded-r-2xl p-4">
+            ODORO
+          </div>
         </h1>
         <div className="bg-white/50 rounded-xl p-6 md:p-8 shadow-lg w-full max-w-md min-h-80 flex flex-col items-center justify-center gap-6">
           <Timer />
-          <div className="flex flex-row justify-items-center gap-4">
-            <PlayButton />
-            <RefreshButton />
-            <VolumeButton />
-            <SettingsButton onClick={() => setShowSettings(true)} />
-          </div>
         </div>
-        
-        {/* Show settings as overlay */}
-        {showSettings && (
-          <Settings onClose={() => setShowSettings(false)} />
-        )}
       </div>
 
       {/* Additional Content Section */}
-      <div className="w-full bg-linear-to-b from-frogWhite)to-white py-16">
+      <div className="w-full bg-linear-to-b from-frogWhite)to-white py-16 font-jersey">
         <div className="max-w-4xl mx-auto px-8 space-y-12">
-          
           {/* About Section */}
           <section className="text-center">
             <h2 className="text-4xl font-bold font-jersey text-frogGreen mb-6">
               About Frogodoro
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-8">
-              The Frogodoro Technique is a time management method that uses focused work sessions 
-              followed by short breaks to maximize productivity. Work for 25 minutes, then take a 
-              5-minute break. It's that simple!
+              The Frogodoro Technique is a time management method that uses
+              focused work sessions followed by short breaks to maximize
+              productivity. Work for 25 minutes, then take a 5-minute break.
+              It's that simple!
             </p>
           </section>
 
@@ -63,23 +51,32 @@ function App() {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-white rounded-xl p-6 shadow-lg text-center">
                 <div className="text-4xl mb-4">🍅</div>
-                <h4 className="text-xl font-bold text-color-frogGreen mb-3">Focus Time</h4>
+                <h4 className="text-xl font-bold text-color-frogGreen mb-3">
+                  Focus Time
+                </h4>
                 <p className="text-gray-600">
-                  Work intensely for 25 minutes on a single task without interruptions.
+                  Work intensely for 25 minutes on a single task without
+                  interruptions.
                 </p>
               </div>
               <div className="bg-white rounded-xl p-6 shadow-lg text-center">
                 <div className="text-4xl mb-4">☕</div>
-                <h4 className="text-xl font-bold text-frogGreen mb-3">Short Break</h4>
+                <h4 className="text-xl font-bold text-frogGreen mb-3">
+                  Short Break
+                </h4>
                 <p className="text-gray-600">
-                  Take a 5-minute break to rest and recharge between work sessions.
+                  Take a 5-minute break to rest and recharge between work
+                  sessions.
                 </p>
               </div>
               <div className="bg-white rounded-xl p-6 shadow-lg text-center">
                 <div className="text-4xl mb-4">🏖️</div>
-                <h4 className="text-xl font-bold text-frogGreen mb-3">Long Break</h4>
+                <h4 className="text-xl font-bold text-frogGreen mb-3">
+                  Long Break
+                </h4>
                 <p className="text-gray-600">
-                  After 4 pomodoros, take a longer 15-30 minute break to fully rest.
+                  After 4 pomodoros, take a longer 15-30 minute break to fully
+                  rest.
                 </p>
               </div>
             </div>
@@ -150,12 +147,10 @@ function App() {
               </div>
             </div>
           </section>
-
         </div>
       </div>
-      
     </main>
-  )
+  );
 }
 
 export default App;

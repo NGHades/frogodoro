@@ -1,10 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Jersey+25&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Jersey+25&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-jersey: "Jersey 25", sans-serif; 
-  --color-frogGreen: #58AF79;
-  --color-frogWhite: #EBF8F0;
+  --font-jersey: "Jersey 25", sans-serif;
+  --color-frogGreen: #58af79;
+  --color-frogWhite: #ebf8f0;
   --color-frogBlack: #373737;
 }
 
+.frog-idle {
+  background-image: url("./assets/GreenBlue/ToxicFrogGreenBlue_Idle.png");
+  background-size: 700% 100%;
+  background-repeat: no-repeat;
+  animation: idle 1.4s steps(7) infinite;
+}
+
+@keyframes idle {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+@keyframes hop {
+  to {
+    background-position: 100% 0;
+  }
+}
