@@ -6,11 +6,14 @@ import RefreshButton from "./RefreshButton";
 import VolumeButton from "./VolumeButton";
 import SettingsButton from "./SettingsButton";
 import Settings from "./Settings";
+import PomodoroButton from "./PomodoroButton";
+import ShortBreakButton from "./ShortBreakButton";
+import LongBreakButton from "./LongBreakButton";
 import frogJump from "../assets/frog-jump.gif";
 import frogIdle from "../assets/frog-idle.gif";
 
 export default function Timer() {
-  const [time, setTime] = useState(1 * 60);
+  const [time, setTime] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState("focus");
   const [cycles, setCycles] = useState(0);
@@ -62,6 +65,21 @@ export default function Timer() {
     setIsRunning(false);
   }
 
+  function handleModeChange(newMode) {
+    setMode(newMode);
+    setIsRunning(false);
+    // Set time based on new mode
+    let initialTime;
+    if (newMode === "focus") {
+      initialTime = 25 * 60;
+    } else if (newMode === "shortBreak") {
+      initialTime = 5 * 60;
+    } else if (newMode === "longBreak") {
+      initialTime = 15 * 60;
+    }
+    setTime(initialTime);
+  }
+
   function formatTime() {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
@@ -69,7 +87,21 @@ export default function Timer() {
   }
 
   return (
-    <div className="font-jersey flex-col">
+    <div className="font-jersey flex flex-col items-center">
+      <div className="flex flex-row justify-center gap-4 mb-6">
+        <PomodoroButton 
+          currentMode={mode} 
+          onModeChange={handleModeChange}
+        />
+        <ShortBreakButton 
+          currentMode={mode} 
+          onModeChange={handleModeChange}
+        />
+        <LongBreakButton 
+          currentMode={mode} 
+          onModeChange={handleModeChange}
+        />
+      </div>
       <div className="w-32 h-20 mx-auto overflow-hidden">
         <img
           src={isRunning ? frogJump : frogIdle}
@@ -77,7 +109,7 @@ export default function Timer() {
           className="w-32 h-32 object-cover object-top"
         />
       </div>
-      <div className="w-75 h-75">
+      <div className="w-75 h-75 mx-auto">
         <CircularProgressbar
           value={countdown()}
           text={formatTime()}
@@ -89,8 +121,11 @@ export default function Timer() {
           })}
         />
       </div>
-      <div className="flex flex-row justify-items-center gap-4 py-16">
-        <PlayButton onClick={() => setIsRunning(!isRunning)} />
+      <div className="flex flex-row justify-center gap-4 py-16">
+        <PlayButton 
+          isPlaying={isRunning} 
+          onClick={() => setIsRunning(!isRunning)} 
+        />
         <RefreshButton onClick={reset} />
         <VolumeButton />
         <SettingsButton onClick={() => setShowSettings(true)} />

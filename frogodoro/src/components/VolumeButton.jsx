@@ -15,7 +15,7 @@ export default function VolumeButton(props) {
     <button
       {...props}
       onClick={handleClick}
-      className="w-16 h-16 bg-frogWhite hover:bg-frogGreen hover:text-frogWhite text-frogGreen rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-105"
+      className="w-16 h-16 bg-frogWhite hover:bg-frogGreen hover:text-frogWhite text-frogGreen ring-3 ring-frogGreen rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-105"
     >
       {isMuted ? (
         // Mute SVG
