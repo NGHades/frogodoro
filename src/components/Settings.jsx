@@ -1,13 +1,71 @@
 import React, { useState, useEffect } from "react";
 import profileFrog from "../assets/profileFrog.svg";
 
-export default function Settings({ onClose }) {
-  const [pomodoroTime, setPomodoroTime] = useState(25);
-  const [shortBreakTime, setShortBreakTime] = useState(5);
-  const [longBreakTime, setLongBreakTime] = useState(15);
-  const [autoStartPomodoros, setAutoStartPomodoros] = useState(false);
-  const [autoStartBreaks, setAutoStartBreaks] = useState(false);
+export default function Settings({ currentSettings, onClose, onSettingsUpdate }) {
+  const [pomodoroTime, setPomodoroTime] = useState(currentSettings.pomodoroTime);
+  const [shortBreakTime, setShortBreakTime] = useState(currentSettings.shortBreakTime);
+  const [longBreakTime, setLongBreakTime] = useState(currentSettings.longBreakTime);
+  const [autoStartPomodoros, setAutoStartPomodoros] = useState(currentSettings.autoStartPomodoros);
+  const [autoStartBreaks, setAutoStartBreaks] = useState(currentSettings.autoStartBreaks);
   const [activeTab, setActiveTab] = useState("timer");
+
+  // Validation state
+  const isValidInput = () => {
+    return pomodoroTime > 0 && shortBreakTime > 0 && longBreakTime > 0;
+  };
+
+  // Function to handle closing and updating settings
+  const handleClose = () => {
+    // Only close if all inputs are valid
+    if (!isValidInput()) {
+      return;
+    }
+    
+    const newSettings = {
+      pomodoroTime: parseInt(pomodoroTime),
+      shortBreakTime: parseInt(shortBreakTime),
+      longBreakTime: parseInt(longBreakTime),
+      autoStartPomodoros,
+      autoStartBreaks
+    };
+    onSettingsUpdate(newSettings);
+  };
+
+  // Handle input changes with validation
+  const handlePomodoroChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || parseInt(value) >= 1) {
+      setPomodoroTime(value);
+    }
+  };
+
+  const handleShortBreakChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || parseInt(value) >= 1) {
+      setShortBreakTime(value);
+    }
+  };
+
+  const handleLongBreakChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || parseInt(value) >= 1) {
+      setLongBreakTime(value);
+    }
+  };
+
+  // Handle escape key to close settings
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && isValidInput()) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [pomodoroTime, shortBreakTime, longBreakTime, autoStartPomodoros, autoStartBreaks]);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -19,7 +77,15 @@ export default function Settings({ onClose }) {
   }, []);
 
   return (
-    <div className="font-jersey fixed inset-0 bg-black/25 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div 
+      className="font-jersey fixed inset-0 bg-black/25 flex items-center justify-center z-50 backdrop-blur-sm"
+      onClick={(e) => {
+        // Close when clicking on backdrop, but only if inputs are valid
+        if (e.target === e.currentTarget && isValidInput()) {
+          handleClose();
+        }
+      }}
+    >
       <div className="bg-white rounded-xl p-0 w-150 h-100 shadow-2xl overflow-hidden">
         <div className="flex h-full">
           {/* Sidebar */}
@@ -79,8 +145,13 @@ export default function Settings({ onClose }) {
             </div>
 
             <button
-              onClick={onClose}
-              className="mt-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+              onClick={handleClose}
+              disabled={!isValidInput()}
+              className={`mt-auto px-4 py-2 rounded-lg transition-colors ${
+                isValidInput() 
+                  ? 'bg-gray-300 text-gray-700 hover:bg-gray-400' 
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
             >
               close
             </button>
@@ -99,8 +170,9 @@ export default function Settings({ onClose }) {
                     <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-2">
                       <input
                         type="number"
+                        min="1"
                         value={pomodoroTime}
-                        onChange={(e) => setPomodoroTime(e.target.value)}
+                        onChange={handlePomodoroChange}
                         className="bg-transparent text-lg font-medium w-8 text-center outline-none"
                       />
                       <span className="text-gray-500">minutes</span>
@@ -114,8 +186,9 @@ export default function Settings({ onClose }) {
                     <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-2">
                       <input
                         type="number"
+                        min="1"
                         value={shortBreakTime}
-                        onChange={(e) => setShortBreakTime(e.target.value)}
+                        onChange={handleShortBreakChange}
                         className="bg-transparent text-lg font-medium w-12 text-center outline-none"
                       />
                       <span className="text-gray-500">minutes</span>
@@ -129,14 +202,22 @@ export default function Settings({ onClose }) {
                     <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-2">
                       <input
                         type="number"
+                        min="1"
                         value={longBreakTime}
-                        onChange={(e) => setLongBreakTime(e.target.value)}
+                        onChange={handleLongBreakChange}
                         className="bg-transparent text-lg font-medium w-12 text-center outline-none"
                       />
                       <span className="text-gray-500">minutes</span>
                     </div>
                   </div>
                 </div>
+
+                {/* Error message for invalid inputs */}
+                {!isValidInput() && (
+                  <div className="text-frogGreen text-sm mt-2">
+                    Please input valid, positive numbers.
+                  </div>
+                )}
 
                 {/* Toggle Settings */}
                 <div className="space-y-4 pt-4">

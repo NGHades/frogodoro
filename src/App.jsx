@@ -5,15 +5,15 @@ import RefreshButton from "./components/RefreshButton";
 import VolumeButton from "./components/VolumeButton";
 import SettingsButton from "./components/SettingsButton";
 import Settings from "./components/Settings";
-import riverLandscape from "./assets/riverLandscape.jpg";
-import swamp from "./assets/swamp.gif";
+import riverLandscape from "./assets/backgrounds/riverLandscape.jpg";
+import swamp from "./assets/backgrounds/swamp.gif";
 import { useState } from "react";
 
 function App() {
   return (
     <main>
       {/* Main Timer Section - Full Screen */}
-      <div className="min-h-screen w-full bg-[url(./assets/riverLandscape.jpg)] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center gap-12 px-4">
+      <div className="min-h-screen w-full bg-[url(./assets/backgrounds/riverLandscape.jpg)] bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center gap-12 px-4">
         <h1 className="flex flex-row text-7xl font-bold font-jersey drop-shadow-2xl">
           <div className="text-frogGreen bg-frogWhite rounded-l-2xl p-4">
             FROG

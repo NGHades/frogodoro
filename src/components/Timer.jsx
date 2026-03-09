@@ -13,11 +13,29 @@ import frogJump from "../assets/frog-jump.gif";
 import frogIdle from "../assets/frog-idle.gif";
 
 export default function Timer() {
-  const [time, setTime] = useState(25 * 60);
+  // Load settings from localStorage or use defaults
+  const loadTimerSettings = () => {
+    const saved = localStorage.getItem('frogodoro-settings');
+    return saved ? JSON.parse(saved) : {
+      pomodoroTime: 25,
+      shortBreakTime: 5,
+      longBreakTime: 15,
+      autoStartPomodoros: false,
+      autoStartBreaks: false
+    };
+  };
+
+  const [timerSettings, setTimerSettings] = useState(loadTimerSettings);
+  const [time, setTime] = useState(timerSettings.pomodoroTime * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState("focus");
   const [cycles, setCycles] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+
+  // Save settings to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('frogodoro-settings', JSON.stringify(timerSettings));
+  }, [timerSettings]);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -38,13 +56,13 @@ export default function Timer() {
   function countdown() {
     let totalTime;
     if (mode === "focus") {
-      totalTime = 25 * 60;
+      totalTime = timerSettings.pomodoroTime * 60;
     } else if (mode === "shortBreak") {
-      totalTime = 5 * 60;
+      totalTime = timerSettings.shortBreakTime * 60;
     } else if (mode === "longBreak") {
-      totalTime = 15 * 60;
+      totalTime = timerSettings.longBreakTime * 60;
     } else {
-      totalTime = 25 * 60;
+      totalTime = timerSettings.pomodoroTime * 60;
     }
     const elapsed = totalTime - time;
     return (elapsed / totalTime) * 100;
@@ -53,13 +71,13 @@ export default function Timer() {
   function reset() {
     let initialTime;
     if (mode === "focus") {
-      initialTime = 25 * 60; // 25 minutes for focus
+      initialTime = timerSettings.pomodoroTime * 60;
     } else if (mode === "shortBreak") {
-      initialTime = 5 * 60; // 5 minutes for short break
+      initialTime = timerSettings.shortBreakTime * 60;
     } else if (mode === "longBreak") {
-      initialTime = 15 * 60; // 15 minutes for long break
+      initialTime = timerSettings.longBreakTime * 60;
     } else {
-      initialTime = 25 * 60; // default to focus
+      initialTime = timerSettings.pomodoroTime * 60;
     }
     setTime(initialTime);
     setIsRunning(false);
@@ -71,13 +89,30 @@ export default function Timer() {
     // Set time based on new mode
     let initialTime;
     if (newMode === "focus") {
-      initialTime = 25 * 60;
+      initialTime = timerSettings.pomodoroTime * 60;
     } else if (newMode === "shortBreak") {
-      initialTime = 5 * 60;
+      initialTime = timerSettings.shortBreakTime * 60;
     } else if (newMode === "longBreak") {
-      initialTime = 15 * 60;
+      initialTime = timerSettings.longBreakTime * 60;
     }
     setTime(initialTime);
+  }
+
+  function handleSettingsUpdate(newSettings) {
+    setTimerSettings(newSettings);
+    setShowSettings(false);
+    // If the current mode's time changed, update the current timer
+    let newTime;
+    if (mode === "focus") {
+      newTime = newSettings.pomodoroTime * 60;
+    } else if (mode === "shortBreak") {
+      newTime = newSettings.shortBreakTime * 60;
+    } else if (mode === "longBreak") {
+      newTime = newSettings.longBreakTime * 60;
+    }
+    if (newTime && !isRunning) {
+      setTime(newTime);
+    }
   }
 
   function formatTime() {
@@ -130,7 +165,13 @@ export default function Timer() {
         <VolumeButton />
         <SettingsButton onClick={() => setShowSettings(true)} />
       </div>
-      {showSettings && <Settings onClose={() => setShowSettings(false)} />}
+      {showSettings && (
+        <Settings 
+          currentSettings={timerSettings}
+          onClose={() => setShowSettings(false)}
+          onSettingsUpdate={handleSettingsUpdate}
+        />
+      )}
     </div>
   );
 }
