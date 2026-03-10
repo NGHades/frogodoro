@@ -6,7 +6,11 @@ import VolumeButton from "./components/VolumeButton";
 import SettingsButton from "./components/SettingsButton";
 import Settings from "./components/Settings";
 import riverLandscape from "./assets/backgrounds/riverLandscape.jpg";
-import swamp from "./assets/backgrounds/swamp.gif";
+import koiPond from "./assets/backgrounds/koi-pond.gif";
+import vivarium from "./assets/backgrounds/vivarium.gif";
+import sunsetLake from "./assets/backgrounds/sunsetLake.gif";
+import waterfall from "./assets/backgrounds/waterfall.gif";
+import desert from "./assets/backgrounds/desert.gif";
 import { useState, createContext, useEffect } from "react";
 
 export const BackgroundContext = createContext();
@@ -23,10 +27,54 @@ function App() {
     localStorage.setItem("frogodoro-background", background);
   }, [background]);
 
-  // Map background IDs to actual imports
+  // Background definitions with metadata
+  const backgroundsData = [
+    {
+      id: "riverLandscape",
+      name: "River Landscape",
+      description: "Peaceful river scene",
+      image: riverLandscape,
+    },
+    {
+      id: "koiPond",
+      name: "Koi Pond",
+      description: "Quaint Koi Pond",
+      image: koiPond,
+    },
+    {
+      id: "vivarium",
+      name: "Vivarium",
+      description: "Vivarium Room",
+      image: vivarium,
+    },
+    {
+      id: "sunsetLake",
+      name: "Sunset Lake",
+      description: "Countryside Orange Sunset",
+      image: sunsetLake,
+    },
+    {
+      id: "waterfall",
+      name: "Waterfall",
+      description: "Foggy Waterfall",
+      image: waterfall,
+    },
+    {
+      id: "desert",
+      name: "Desert",
+      description: "Cloudy Desert",
+      image: desert,
+    },
+  ];
+
+  // Map background IDs to actual imports for styling
   const backgrounds = {
     riverLandscape: riverLandscape,
-    swamp: swamp,
+    koiPond: koiPond,
+    vivarium: vivarium,
+    sunsetLake: sunsetLake,
+    waterfall: waterfall,
+    desert: desert,
   };
 
   const backgroundStyle = {
@@ -34,7 +82,9 @@ function App() {
   };
 
   return (
-    <BackgroundContext.Provider value={{ background, setBackground }}>
+    <BackgroundContext.Provider
+      value={{ background, setBackground, backgroundsData }}
+    >
       <main>
         {/* Main Timer Section - Full Screen */}
         <div
