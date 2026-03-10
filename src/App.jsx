@@ -128,10 +128,10 @@ function App() {
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="bg-white rounded-xl p-6 shadow-lg text-center">
                   <div className="text-4xl mb-4">🍅</div>
-                  <h4 className="text-xl font-bold text-color-frogGreen mb-3">
+                  <h4 className="text-xl font-bold text-frogGreen mb-3">
                     Focus Time
                   </h4>
-                  <p className="text-frogGreen">
+                  <p className="text-gray-600">
                     Work intensely for 25 minutes on a single task without
                     interruptions.
                   </p>
