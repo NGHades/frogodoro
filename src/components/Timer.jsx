@@ -15,14 +15,17 @@ import frogIdle from "../assets/frog-idle.gif";
 export default function Timer() {
   // Load settings from localStorage or use defaults
   const loadTimerSettings = () => {
-    const saved = localStorage.getItem('frogodoro-settings');
-    return saved ? JSON.parse(saved) : {
-      pomodoroTime: 25,
-      shortBreakTime: 5,
-      longBreakTime: 15,
-      autoStartPomodoros: false,
-      autoStartBreaks: false
-    };
+    const saved = localStorage.getItem("frogodoro-settings");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          pomodoroTime: 25,
+          shortBreakTime: 5,
+          longBreakTime: 15,
+          autoStartPomodoros: false,
+          autoStartBreaks: false,
+          background: "riverLandscape",
+        };
   };
 
   const [timerSettings, setTimerSettings] = useState(loadTimerSettings);
@@ -34,7 +37,7 @@ export default function Timer() {
 
   // Save settings to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('frogodoro-settings', JSON.stringify(timerSettings));
+    localStorage.setItem("frogodoro-settings", JSON.stringify(timerSettings));
   }, [timerSettings]);
 
   useEffect(() => {
@@ -124,18 +127,9 @@ export default function Timer() {
   return (
     <div className="font-jersey flex flex-col items-center">
       <div className="flex flex-row justify-center gap-4 mb-6">
-        <PomodoroButton 
-          currentMode={mode} 
-          onModeChange={handleModeChange}
-        />
-        <ShortBreakButton 
-          currentMode={mode} 
-          onModeChange={handleModeChange}
-        />
-        <LongBreakButton 
-          currentMode={mode} 
-          onModeChange={handleModeChange}
-        />
+        <PomodoroButton currentMode={mode} onModeChange={handleModeChange} />
+        <ShortBreakButton currentMode={mode} onModeChange={handleModeChange} />
+        <LongBreakButton currentMode={mode} onModeChange={handleModeChange} />
       </div>
       <div className="w-32 h-20 mx-auto overflow-hidden">
         <img
@@ -157,16 +151,16 @@ export default function Timer() {
         />
       </div>
       <div className="flex flex-row justify-center gap-4 py-16">
-        <PlayButton 
-          isPlaying={isRunning} 
-          onClick={() => setIsRunning(!isRunning)} 
+        <PlayButton
+          isPlaying={isRunning}
+          onClick={() => setIsRunning(!isRunning)}
         />
         <RefreshButton onClick={reset} />
         <VolumeButton />
         <SettingsButton onClick={() => setShowSettings(true)} />
       </div>
       {showSettings && (
-        <Settings 
+        <Settings
           currentSettings={timerSettings}
           onClose={() => setShowSettings(false)}
           onSettingsUpdate={handleSettingsUpdate}

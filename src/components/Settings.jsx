@@ -1,13 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import profileFrog from "../assets/profileFrog.svg";
+import { BackgroundContext } from "../App";
+import riverLandscape from "../assets/backgrounds/riverLandscape.jpg";
+import swamp from "../assets/backgrounds/swamp.gif";
 
-export default function Settings({ currentSettings, onClose, onSettingsUpdate }) {
-  const [pomodoroTime, setPomodoroTime] = useState(currentSettings.pomodoroTime);
-  const [shortBreakTime, setShortBreakTime] = useState(currentSettings.shortBreakTime);
-  const [longBreakTime, setLongBreakTime] = useState(currentSettings.longBreakTime);
-  const [autoStartPomodoros, setAutoStartPomodoros] = useState(currentSettings.autoStartPomodoros);
-  const [autoStartBreaks, setAutoStartBreaks] = useState(currentSettings.autoStartBreaks);
+export default function Settings({
+  currentSettings,
+  onClose,
+  onSettingsUpdate,
+}) {
+  const { background, setBackground } = useContext(BackgroundContext);
+  
+  const [pomodoroTime, setPomodoroTime] = useState(
+    currentSettings.pomodoroTime,
+  );
+  const [shortBreakTime, setShortBreakTime] = useState(
+    currentSettings.shortBreakTime,
+  );
+  const [longBreakTime, setLongBreakTime] = useState(
+    currentSettings.longBreakTime,
+  );
+  const [autoStartPomodoros, setAutoStartPomodoros] = useState(
+    currentSettings.autoStartPomodoros,
+  );
+  const [autoStartBreaks, setAutoStartBreaks] = useState(
+    currentSettings.autoStartBreaks,
+  );
   const [activeTab, setActiveTab] = useState("timer");
+
+  const [selectedBackground, setSeltectedBackground] = useState(currentSettings.background || 'riverLandscape');
+
+  const backgrounds = [
+    { id: 'riverLandscape', name: 'River Landscape', file: ".assets/backgrounds/riverLandscape.jpg" }, 
+    { id: 'swamp', name: 'Swamp', file: 'assets/backgrounds/swamp.gif' }
+  ]
 
   // Validation state
   const isValidInput = () => {
@@ -20,13 +46,13 @@ export default function Settings({ currentSettings, onClose, onSettingsUpdate })
     if (!isValidInput()) {
       return;
     }
-    
+
     const newSettings = {
       pomodoroTime: parseInt(pomodoroTime),
       shortBreakTime: parseInt(shortBreakTime),
       longBreakTime: parseInt(longBreakTime),
       autoStartPomodoros,
-      autoStartBreaks
+      autoStartBreaks,
     };
     onSettingsUpdate(newSettings);
   };
@@ -34,21 +60,21 @@ export default function Settings({ currentSettings, onClose, onSettingsUpdate })
   // Handle input changes with validation
   const handlePomodoroChange = (e) => {
     const value = e.target.value;
-    if (value === '' || parseInt(value) >= 1) {
+    if (value === "" || parseInt(value) >= 1) {
       setPomodoroTime(value);
     }
   };
 
   const handleShortBreakChange = (e) => {
     const value = e.target.value;
-    if (value === '' || parseInt(value) >= 1) {
+    if (value === "" || parseInt(value) >= 1) {
       setShortBreakTime(value);
     }
   };
 
   const handleLongBreakChange = (e) => {
     const value = e.target.value;
-    if (value === '' || parseInt(value) >= 1) {
+    if (value === "" || parseInt(value) >= 1) {
       setLongBreakTime(value);
     }
   };
@@ -56,16 +82,22 @@ export default function Settings({ currentSettings, onClose, onSettingsUpdate })
   // Handle escape key to close settings
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape' && isValidInput()) {
+      if (event.key === "Escape" && isValidInput()) {
         handleClose();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [pomodoroTime, shortBreakTime, longBreakTime, autoStartPomodoros, autoStartBreaks]);
+  }, [
+    pomodoroTime,
+    shortBreakTime,
+    longBreakTime,
+    autoStartPomodoros,
+    autoStartBreaks,
+  ]);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -77,7 +109,7 @@ export default function Settings({ currentSettings, onClose, onSettingsUpdate })
   }, []);
 
   return (
-    <div 
+    <div
       className="font-jersey fixed inset-0 bg-black/25 flex items-center justify-center z-50 backdrop-blur-sm"
       onClick={(e) => {
         // Close when clicking on backdrop, but only if inputs are valid
@@ -148,9 +180,9 @@ export default function Settings({ currentSettings, onClose, onSettingsUpdate })
               onClick={handleClose}
               disabled={!isValidInput()}
               className={`mt-auto px-4 py-2 rounded-lg transition-colors ${
-                isValidInput() 
-                  ? 'bg-gray-300 text-gray-700 hover:bg-gray-400' 
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                isValidInput()
+                  ? "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >
               close
@@ -259,11 +291,72 @@ export default function Settings({ currentSettings, onClose, onSettingsUpdate })
             )}
 
             {activeTab === "appearance" && (
-              <div className="text-gray-600">
-                <h3 className="text-lg font-medium mb-4">
-                  Appearance Settings
+              <div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-6">
+                  Background Selection
                 </h3>
-                <p>Theme and visual customization options coming soon...</p>
+                <div className="grid grid-cols-2 gap-6">
+                  {/* River Landscape */}
+                  <div
+                    onClick={() => setBackground('riverLandscape')}
+                    className={`cursor-pointer rounded-xl overflow-hidden border-4 transition-all hover:scale-105 ${
+                      background === 'riverLandscape'
+                        ? 'border-frogGreen shadow-lg'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="relative">
+                      <img
+                        src={riverLandscape}
+                        alt="River Landscape"
+                        className="w-full h-40 object-cover"
+                      />
+                      {background === 'riverLandscape' && (
+                        <div className="absolute top-2 right-2 bg-frogGreen text-white rounded-full p-1">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 bg-white">
+                      <h4 className="font-semibold text-gray-800">River Landscape</h4>
+                      <p className="text-sm text-gray-500">Peaceful river scene</p>
+                    </div>
+                  </div>
+
+                  {/* Swamp */}
+                  <div
+                    onClick={() => setBackground('swamp')}
+                    className={`cursor-pointer rounded-xl overflow-hidden border-4 transition-all hover:scale-105 ${
+                      background === 'swamp'
+                        ? 'border-frogGreen shadow-lg'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="relative">
+                      <img
+                        src={swamp}
+                        alt="Swamp"
+                        className="w-full h-40 object-cover"
+                      />
+                      {background === 'swamp' && (
+                        <div className="absolute top-2 right-2 bg-frogGreen text-white rounded-full p-1">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 bg-white">
+                      <h4 className="font-semibold text-gray-800">Swamp</h4>
+                      <p className="text-sm text-gray-500">Animated swamp scene</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500 mt-4">
+                  Click on a background to select it. Changes are saved automatically.
+                </p>
               </div>
             )}
 
