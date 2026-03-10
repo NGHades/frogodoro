@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import profileFrog from "../assets/profileFrog.svg";
+import profileFrogGray from "../assets/profileFrog-gray.svg";
 import { BackgroundContext } from "../App";
 import riverLandscape from "../assets/backgrounds/riverLandscape.jpg";
 import swamp from "../assets/backgrounds/swamp.gif";
@@ -10,7 +11,7 @@ export default function Settings({
   onSettingsUpdate,
 }) {
   const { background, setBackground } = useContext(BackgroundContext);
-  
+
   const [pomodoroTime, setPomodoroTime] = useState(
     currentSettings.pomodoroTime,
   );
@@ -28,12 +29,18 @@ export default function Settings({
   );
   const [activeTab, setActiveTab] = useState("timer");
 
-  const [selectedBackground, setSeltectedBackground] = useState(currentSettings.background || 'riverLandscape');
+  const [selectedBackground, setSeltectedBackground] = useState(
+    currentSettings.background || "riverLandscape",
+  );
 
   const backgrounds = [
-    { id: 'riverLandscape', name: 'River Landscape', file: ".assets/backgrounds/riverLandscape.jpg" }, 
-    { id: 'swamp', name: 'Swamp', file: 'assets/backgrounds/swamp.gif' }
-  ]
+    {
+      id: "riverLandscape",
+      name: "River Landscape",
+      file: ".assets/backgrounds/riverLandscape.jpg",
+    },
+    { id: "swamp", name: "Swamp", file: "assets/backgrounds/swamp.gif" },
+  ];
 
   // Validation state
   const isValidInput = () => {
@@ -171,7 +178,11 @@ export default function Settings({
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
-                <img src={profileFrog} alt="Profile Frog" className="w-5 h-5" />
+                <img
+                  src={activeTab === "account" ? profileFrog : profileFrogGray}
+                  alt="Profile Frog"
+                  className="w-5 h-5"
+                />
                 account
               </button>
             </div>
@@ -192,7 +203,7 @@ export default function Settings({
           {/* Main Content */}
           <div className="flex-1 p-8">
             {activeTab === "timer" && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-md">
                 {/* Time Settings */}
                 <div className="flex gap-6">
                   <div className="flex flex-col">
@@ -221,7 +232,7 @@ export default function Settings({
                         min="1"
                         value={shortBreakTime}
                         onChange={handleShortBreakChange}
-                        className="bg-transparent text-lg font-medium w-12 text-center outline-none"
+                        className="bg-transparent text-lg font-medium w-8 text-center outline-none"
                       />
                       <span className="text-gray-500">minutes</span>
                     </div>
@@ -237,7 +248,7 @@ export default function Settings({
                         min="1"
                         value={longBreakTime}
                         onChange={handleLongBreakChange}
-                        className="bg-transparent text-lg font-medium w-12 text-center outline-none"
+                        className="bg-transparent text-lg font-medium w-8 text-center outline-none"
                       />
                       <span className="text-gray-500">minutes</span>
                     </div>
@@ -298,11 +309,11 @@ export default function Settings({
                 <div className="grid grid-cols-2 gap-6">
                   {/* River Landscape */}
                   <div
-                    onClick={() => setBackground('riverLandscape')}
+                    onClick={() => setBackground("riverLandscape")}
                     className={`cursor-pointer rounded-xl overflow-hidden border-4 transition-all hover:scale-105 ${
-                      background === 'riverLandscape'
-                        ? 'border-frogGreen shadow-lg'
-                        : 'border-gray-200 hover:border-gray-300'
+                      background === "riverLandscape"
+                        ? "border-frogGreen shadow-lg"
+                        : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
                     <div className="relative">
@@ -311,27 +322,39 @@ export default function Settings({
                         alt="River Landscape"
                         className="w-full h-40 object-cover"
                       />
-                      {background === 'riverLandscape' && (
+                      {background === "riverLandscape" && (
                         <div className="absolute top-2 right-2 bg-frogGreen text-white rounded-full p-1">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          <svg
+                            className="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                         </div>
                       )}
                     </div>
                     <div className="p-3 bg-white">
-                      <h4 className="font-semibold text-gray-800">River Landscape</h4>
-                      <p className="text-sm text-gray-500">Peaceful river scene</p>
+                      <h4 className="font-semibold text-gray-800">
+                        River Landscape
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        Peaceful river scene
+                      </p>
                     </div>
                   </div>
 
                   {/* Swamp */}
                   <div
-                    onClick={() => setBackground('swamp')}
+                    onClick={() => setBackground("swamp")}
                     className={`cursor-pointer rounded-xl overflow-hidden border-4 transition-all hover:scale-105 ${
-                      background === 'swamp'
-                        ? 'border-frogGreen shadow-lg'
-                        : 'border-gray-200 hover:border-gray-300'
+                      background === "swamp"
+                        ? "border-frogGreen shadow-lg"
+                        : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
                     <div className="relative">
@@ -340,22 +363,33 @@ export default function Settings({
                         alt="Swamp"
                         className="w-full h-40 object-cover"
                       />
-                      {background === 'swamp' && (
+                      {background === "swamp" && (
                         <div className="absolute top-2 right-2 bg-frogGreen text-white rounded-full p-1">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          <svg
+                            className="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                         </div>
                       )}
                     </div>
                     <div className="p-3 bg-white">
                       <h4 className="font-semibold text-gray-800">Swamp</h4>
-                      <p className="text-sm text-gray-500">Animated swamp scene</p>
+                      <p className="text-sm text-gray-500">
+                        Animated swamp scene
+                      </p>
                     </div>
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 mt-4">
-                  Click on a background to select it. Changes are saved automatically.
+                  Click on a background to select it. Changes are saved
+                  automatically.
                 </p>
               </div>
             )}
