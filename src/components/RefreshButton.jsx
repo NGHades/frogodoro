@@ -2,13 +2,13 @@ export default function RefreshButton(props) {
   return (
     <button
       {...props}
-      className="w-16 h-16 bg-frogGreen hover:bg-frogWhite hover:text-frogGreen text-frogWhite rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-105"
+      className="w-16 h-16 bg-frogGreen hover:bg-frogWhite hover:text-frogGreen text-frogWhite rounded-2xl flex justify-center items-center shadow-lg transition-all duration-200 hover:scale-105"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-8 h-8 ml-1"
+        className="w-8 h-8"
       >
         <path
           fillRule="evenodd"

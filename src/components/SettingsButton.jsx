@@ -8,7 +8,7 @@ export default function SettingsButton(props) {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-8 h-8 ml-1"
+        className="w-8 h-8"
       >
         <path
           fillRule="evenodd"
