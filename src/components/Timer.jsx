@@ -56,6 +56,43 @@ export default function Timer() {
     return () => clearInterval(interval);
   }, [isRunning]);
 
+  // Handle auto-starting next session when timer completes
+  useEffect(() => {
+    if (time === 0 && !isRunning) {
+      // Timer just completed
+      if (mode === "focus") {
+        // Pomodoro completed, increment cycles
+        const newCycles = cycles + 1;
+        setCycles(newCycles);
+
+        // Determine which break to take
+        const nextMode = newCycles % 4 === 0 ? "longBreak" : "shortBreak";
+        const nextTime =
+          nextMode === "longBreak"
+            ? timerSettings.longBreakTime * 60
+            : timerSettings.shortBreakTime * 60;
+
+        setMode(nextMode);
+        setTime(nextTime);
+
+        // Auto-start break if enabled
+        if (timerSettings.autoStartBreaks) {
+          setIsRunning(true);
+        }
+      } else if (mode === "shortBreak" || mode === "longBreak") {
+        // Break completed, switch to focus
+        const nextTime = timerSettings.pomodoroTime * 60;
+        setMode("focus");
+        setTime(nextTime);
+
+        // Auto-start pomodoro if enabled
+        if (timerSettings.autoStartPomodoros) {
+          setIsRunning(true);
+        }
+      }
+    }
+  }, [time, isRunning, mode, cycles, timerSettings]);
+
   function countdown() {
     let totalTime;
     if (mode === "focus") {
