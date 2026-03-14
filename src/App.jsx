@@ -85,6 +85,7 @@ function App() {
     <BackgroundContext.Provider
       value={{ background, setBackground, backgroundsData }}
     >
+      <NavBar />
       <main>
         {/* Main Timer Section - Full Screen */}
         <div

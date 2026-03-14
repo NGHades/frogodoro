@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import PlayButton from "./PlayButton";
@@ -11,8 +11,11 @@ import ShortBreakButton from "./ShortBreakButton";
 import LongBreakButton from "./LongBreakButton";
 import frogJump from "../assets/frog-jump.gif";
 import frogIdle from "../assets/frog-idle.gif";
+import { AuthContext } from "../context/AuthContext";
+import { recordSessionCompletion } from "../services/firestoreService";
 
 export default function Timer() {
+  const { currentUser } = useContext(AuthContext);
   // Load settings from localStorage or use defaults
   const loadTimerSettings = () => {
     const saved = localStorage.getItem("frogodoro-settings");
@@ -65,6 +68,15 @@ export default function Timer() {
         const newCycles = cycles + 1;
         setCycles(newCycles);
 
+        // Record session to Firestore if user is logged in
+        if (currentUser) {
+          recordSessionCompletion(
+            currentUser.uid,
+            timerSettings.pomodoroTime,
+            0,
+          ).catch((error) => console.error("Failed to record session:", error));
+        }
+
         // Determine which break to take
         const nextMode = newCycles % 4 === 0 ? "longBreak" : "shortBreak";
         const nextTime =
@@ -91,7 +103,7 @@ export default function Timer() {
         }
       }
     }
-  }, [time, isRunning, mode, cycles, timerSettings]);
+  }, [time, isRunning, mode, cycles, timerSettings, currentUser]);
 
   function countdown() {
     let totalTime;
