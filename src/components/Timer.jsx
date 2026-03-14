@@ -12,7 +12,10 @@ import LongBreakButton from "./LongBreakButton";
 import frogJump from "../assets/frog-jump.gif";
 import frogIdle from "../assets/frog-idle.gif";
 import { AuthContext } from "../context/AuthContext";
-import { recordSessionCompletion } from "../services/firestoreService";
+import {
+  recordSessionCompletion,
+  loadUserSettings,
+} from "../services/firestoreService";
 
 export default function Timer() {
   const { currentUser } = useContext(AuthContext);
@@ -37,11 +40,32 @@ export default function Timer() {
   const [mode, setMode] = useState("focus");
   const [cycles, setCycles] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+  const [settingsLoaded, setSettingsLoaded] = useState(!currentUser); // Only pending if logged in
 
   // Save settings to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("frogodoro-settings", JSON.stringify(timerSettings));
   }, [timerSettings]);
+
+  // Load settings from Firestore when user logs in
+  useEffect(() => {
+    if (currentUser && !settingsLoaded) {
+      loadUserSettings(currentUser.uid)
+        .then((firebaseSettings) => {
+          console.log("Loaded settings from Firestore:", firebaseSettings);
+          if (firebaseSettings) {
+            setTimerSettings(firebaseSettings);
+          }
+          setSettingsLoaded(true);
+        })
+        .catch((error) => {
+          console.error("Failed to load settings:", error);
+          setSettingsLoaded(true); // Still mark as loaded even on error
+        });
+    } else if (!currentUser) {
+      setSettingsLoaded(false); // Reset when user logs out
+    }
+  }, [currentUser, settingsLoaded]);
 
   useEffect(() => {
     if (!isRunning) return;

@@ -1,4 +1,3 @@
-import NavBar from "./components/Navbar";
 import Timer from "./components/Timer";
 import PlayButton from "./components/PlayButton";
 import RefreshButton from "./components/RefreshButton";
@@ -11,11 +10,15 @@ import vivarium from "./assets/backgrounds/vivarium.gif";
 import sunsetLake from "./assets/backgrounds/sunsetLake.gif";
 import waterfall from "./assets/backgrounds/waterfall.gif";
 import desert from "./assets/backgrounds/desert.gif";
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import { loadUserSettings } from "./services/firestoreService";
 
 export const BackgroundContext = createContext();
 
 function App() {
+  const { currentUser } = useContext(AuthContext);
+
   // Load background from localStorage or use default
   const [background, setBackground] = useState(() => {
     const saved = localStorage.getItem("frogodoro-background");
@@ -26,6 +29,22 @@ function App() {
   useEffect(() => {
     localStorage.setItem("frogodoro-background", background);
   }, [background]);
+
+  // Load settings from Firestore when user logs in
+  useEffect(() => {
+    if (currentUser) {
+      loadUserSettings(currentUser.uid)
+        .then((settings) => {
+          if (settings) {
+            // Update background from Firestore
+            if (settings.background) {
+              setBackground(settings.background);
+            }
+          }
+        })
+        .catch((error) => console.error("Failed to load background:", error));
+    }
+  }, [currentUser]);
 
   // Background definitions with metadata
   const backgroundsData = [
@@ -85,7 +104,6 @@ function App() {
     <BackgroundContext.Provider
       value={{ background, setBackground, backgroundsData }}
     >
-      <NavBar />
       <main>
         {/* Main Timer Section - Full Screen */}
         <div

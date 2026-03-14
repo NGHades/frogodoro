@@ -3,7 +3,10 @@ import profileFrog from "../assets/profileFrog.svg";
 import profileFrogGray from "../assets/profileFrog-gray.svg";
 import { BackgroundContext } from "../App";
 import { AuthContext } from "../context/AuthContext";
-import { createUserProfile } from "../services/firestoreService";
+import {
+  createUserProfile,
+  saveUserSettings,
+} from "../services/firestoreService";
 
 export default function Settings({
   currentSettings,
@@ -54,7 +57,16 @@ export default function Settings({
       longBreakTime: parseInt(longBreakTime),
       autoStartPomodoros,
       autoStartBreaks,
+      background,
     };
+
+    // Save to Firestore if user is logged in (but don't wait for it)
+    if (currentUser) {
+      saveUserSettings(currentUser.uid, newSettings).catch((error) =>
+        console.error("Failed to save settings to Firestore:", error),
+      );
+    }
+
     onSettingsUpdate(newSettings);
   };
 

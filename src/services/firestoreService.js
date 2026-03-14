@@ -13,6 +13,14 @@ export const createUserProfile = async (uid, email) => {
   await setDoc(doc(db, "users", uid), {
     email,
     createdAt: new Date(),
+    settings: {
+      pomodoroTime: 25,
+      shortBreakTime: 5,
+      longBreakTime: 15,
+      autoStartPomodoros: false,
+      autoStartBreaks: false,
+      background: "riverLandscape",
+    },
     stats: {
       sessionsCompleted: 0,
       totalFocusTime: 0, // in minutes
@@ -84,6 +92,51 @@ export const addSessionToHistory = async (uid, sessionData) => {
     });
   } catch (error) {
     console.error("Error adding session to history:", error);
+    throw error;
+  }
+};
+
+// Save user settings to Firestore
+export const saveUserSettings = async (uid, settings) => {
+  const userRef = doc(db, "users", uid);
+
+  try {
+    await setDoc(
+      userRef,
+      {
+        settings: {
+          pomodoroTime: settings.pomodoroTime,
+          shortBreakTime: settings.shortBreakTime,
+          longBreakTime: settings.longBreakTime,
+          autoStartPomodoros: settings.autoStartPomodoros,
+          autoStartBreaks: settings.autoStartBreaks,
+          background: settings.background,
+        },
+      },
+      { merge: true },
+    );
+    console.log("Settings saved successfully to Firestore");
+  } catch (error) {
+    console.error("Error saving settings:", error);
+    throw error;
+  }
+};
+
+// Load user settings from Firestore
+export const loadUserSettings = async (uid) => {
+  const docRef = doc(db, "users", uid);
+
+  try {
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists() && docSnap.data().settings) {
+      console.log("Settings loaded from Firestore:", docSnap.data().settings);
+      return docSnap.data().settings;
+    }
+    console.log("No settings found in Firestore for user:", uid);
+    return null;
+  } catch (error) {
+    console.error("Error loading settings from Firestore:", error);
     throw error;
   }
 };
