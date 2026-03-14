@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useMemo } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -31,6 +31,7 @@ export function AuthProvider({ children }) {
   // Listen for auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("Auth state changed:", user ? user.email : "logged out");
       setCurrentUser(user);
       setLoading(false);
     });
@@ -38,12 +39,16 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = {
-    currentUser,
-    signup,
-    login,
-    logout,
-  };
+  // Memoize the value to prevent unnecessary re-renders
+  const value = useMemo(
+    () => ({
+      currentUser,
+      signup,
+      login,
+      logout,
+    }),
+    [currentUser],
+  );
 
   return (
     <AuthContext.Provider value={value}>

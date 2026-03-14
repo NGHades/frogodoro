@@ -40,7 +40,6 @@ export default function Timer() {
   const [mode, setMode] = useState("focus");
   const [cycles, setCycles] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
-  const [settingsLoaded, setSettingsLoaded] = useState(!currentUser); // Only pending if logged in
 
   // Save settings to localStorage whenever they change
   useEffect(() => {
@@ -49,23 +48,44 @@ export default function Timer() {
 
   // Load settings from Firestore when user logs in
   useEffect(() => {
-    if (currentUser && !settingsLoaded) {
+    console.log("Timer effect running - currentUser:", currentUser?.email);
+    if (currentUser) {
+      console.log("User is logged in, loading settings for:", currentUser.uid);
       loadUserSettings(currentUser.uid)
         .then((firebaseSettings) => {
           console.log("Loaded settings from Firestore:", firebaseSettings);
           if (firebaseSettings) {
+            console.log("Setting timer settings to:", firebaseSettings);
             setTimerSettings(firebaseSettings);
           }
-          setSettingsLoaded(true);
         })
         .catch((error) => {
           console.error("Failed to load settings:", error);
-          setSettingsLoaded(true); // Still mark as loaded even on error
         });
-    } else if (!currentUser) {
-      setSettingsLoaded(false); // Reset when user logs out
+    } else {
+      console.log("No current user");
     }
-  }, [currentUser, settingsLoaded]);
+  }, [currentUser]); // Depend on currentUser object directly
+
+  // Reset to defaults when user logs out
+  useEffect(() => {
+    if (!currentUser) {
+      const defaultSettings = {
+        pomodoroTime: 25,
+        shortBreakTime: 5,
+        longBreakTime: 15,
+        autoStartPomodoros: false,
+        autoStartBreaks: false,
+        background: "riverLandscape",
+      };
+      console.log("User logged out, resetting to defaults");
+      setTimerSettings(defaultSettings);
+      setTime(defaultSettings.pomodoroTime * 60);
+      setMode("focus");
+      setCycles(0);
+      setIsRunning(false);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if (!isRunning) return;

@@ -124,10 +124,12 @@ export const saveUserSettings = async (uid, settings) => {
 
 // Load user settings from Firestore
 export const loadUserSettings = async (uid) => {
+  console.log("loadUserSettings called with uid:", uid);
   const docRef = doc(db, "users", uid);
 
   try {
     const docSnap = await getDoc(docRef);
+    console.log("Firestore doc retrieved:", docSnap.exists(), docSnap.data());
 
     if (docSnap.exists() && docSnap.data().settings) {
       console.log("Settings loaded from Firestore:", docSnap.data().settings);

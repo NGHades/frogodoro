@@ -30,19 +30,20 @@ function App() {
     localStorage.setItem("frogodoro-background", background);
   }, [background]);
 
-  // Load settings from Firestore when user logs in
+  // Load settings from Firestore when user logs in, reset to defaults on logout
   useEffect(() => {
     if (currentUser) {
+      // User logged in - load from Firestore
       loadUserSettings(currentUser.uid)
         .then((settings) => {
-          if (settings) {
-            // Update background from Firestore
-            if (settings.background) {
-              setBackground(settings.background);
-            }
+          if (settings && settings.background) {
+            setBackground(settings.background);
           }
         })
         .catch((error) => console.error("Failed to load background:", error));
+    } else {
+      // User logged out - reset to default
+      setBackground("riverLandscape");
     }
   }, [currentUser]);
 
