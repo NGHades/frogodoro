@@ -53,19 +53,24 @@ export default function Timer() {
         .then((firebaseSettings) => {
           console.log("Loaded settings from Firestore:", firebaseSettings);
           if (firebaseSettings) {
-            // Firestore has settings, use them and update localStorage
+            // Firestore has settings, use them
+            console.log("Using Firestore settings");
             setTimerSettings(firebaseSettings);
             setTime(firebaseSettings.pomodoroTime * 60);
           } else {
             // Firestore has no settings, use localStorage fallback
+            console.log("No Firestore settings, using localStorage");
             const localSettings = loadTimerSettings();
+            setTimerSettings(localSettings);
             setTime(localSettings.pomodoroTime * 60);
           }
         })
         .catch((error) => {
-          console.error("Failed to load settings:", error);
+          console.error("Failed to load settings from Firestore:", error);
           // Fallback to localStorage on error
+          console.log("Firestore error, using localStorage fallback");
           const localSettings = loadTimerSettings();
+          setTimerSettings(localSettings);
           setTime(localSettings.pomodoroTime * 60);
         });
     }
