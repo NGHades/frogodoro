@@ -52,10 +52,38 @@ export const recordSessionCompletion = async (uid, focusTime, breakTime) => {
 
   try {
     const userDoc = await getDoc(userRef);
-    const currentData = userDoc.data();
-    const lastSessionDate = currentData.stats.lastSessionDate;
 
-    // Check if it's a new day for streak tracking
+    if (!userDoc.exists()) {
+      console.error("User document does not exist");
+      return;
+    }
+
+    const currentData = userDoc.data();
+
+    // Initialize stats if they don't exist
+    if (!currentData.stats) {
+      console.log("Stats field missing, initializing...");
+      await setDoc(
+        userRef,
+        {
+          stats: {
+            sessionsCompleted: 1,
+            totalFocusTime: focusTime,
+            totalBreakTime: breakTime,
+            currentStreak: 1,
+            longestStreak: 1,
+            lastSessionDate: today,
+          },
+        },
+        { merge: true },
+      );
+      console.log(
+        `Stats initialized: +${focusTime}min focus, +${breakTime}min break`,
+      );
+      return;
+    }
+
+    const lastSessionDate = currentData.stats.lastSessionDate;
     const isNewDay = lastSessionDate !== today;
 
     await updateDoc(userRef, {
