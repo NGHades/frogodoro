@@ -48,26 +48,30 @@ export default function Timer() {
 
   // Load settings from Firestore when user logs in
   useEffect(() => {
-    console.log("Timer effect running - currentUser:", currentUser?.email);
     if (currentUser) {
-      console.log("User is logged in, loading settings for:", currentUser.uid);
       loadUserSettings(currentUser.uid)
         .then((firebaseSettings) => {
           console.log("Loaded settings from Firestore:", firebaseSettings);
           if (firebaseSettings) {
-            console.log("Setting timer settings to:", firebaseSettings);
+            // Firestore has settings, use them and update localStorage
             setTimerSettings(firebaseSettings);
+            setTime(firebaseSettings.pomodoroTime * 60);
+          } else {
+            // Firestore has no settings, use localStorage fallback
+            const localSettings = loadTimerSettings();
+            setTime(localSettings.pomodoroTime * 60);
           }
         })
         .catch((error) => {
           console.error("Failed to load settings:", error);
+          // Fallback to localStorage on error
+          const localSettings = loadTimerSettings();
+          setTime(localSettings.pomodoroTime * 60);
         });
-    } else {
-      console.log("No current user");
     }
-  }, [currentUser]); // Depend on currentUser object directly
+  }, [currentUser?.uid]);
 
-  // Reset to defaults when user logs out
+  // Reset to defaults when user logs out (but don't save to localStorage)
   useEffect(() => {
     if (!currentUser) {
       const defaultSettings = {
@@ -78,12 +82,16 @@ export default function Timer() {
         autoStartBreaks: false,
         background: "riverLandscape",
       };
-      console.log("User logged out, resetting to defaults");
-      setTimerSettings(defaultSettings);
+      console.log("User logged out, resetting UI to defaults");
+      // Update state but don't trigger localStorage save by using these values inline
       setTime(defaultSettings.pomodoroTime * 60);
       setMode("focus");
       setCycles(0);
       setIsRunning(false);
+      // Reset timerSettings AFTER a delay to avoid triggering localStorage save immediately
+      setTimeout(() => {
+        setTimerSettings(defaultSettings);
+      }, 0);
     }
   }, [currentUser]);
 

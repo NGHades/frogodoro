@@ -10,26 +10,33 @@ import { db } from "../components/firebaseConfig";
 
 // Create user profile in Firestore when they sign up
 export const createUserProfile = async (uid, email) => {
-  await setDoc(doc(db, "users", uid), {
-    email,
-    createdAt: new Date(),
-    settings: {
-      pomodoroTime: 25,
-      shortBreakTime: 5,
-      longBreakTime: 15,
-      autoStartPomodoros: false,
-      autoStartBreaks: false,
-      background: "riverLandscape",
-    },
-    stats: {
-      sessionsCompleted: 0,
-      totalFocusTime: 0, // in minutes
-      totalBreakTime: 0,
-      currentStreak: 0,
-      longestStreak: 0,
-      lastSessionDate: null,
-    },
-  });
+  console.log("Creating user profile for UID:", uid, "Email:", email);
+  try {
+    await setDoc(doc(db, "users", uid), {
+      email,
+      createdAt: new Date(),
+      settings: {
+        pomodoroTime: 25,
+        shortBreakTime: 5,
+        longBreakTime: 15,
+        autoStartPomodoros: false,
+        autoStartBreaks: false,
+        background: "riverLandscape",
+      },
+      stats: {
+        sessionsCompleted: 0,
+        totalFocusTime: 0, // in minutes
+        totalBreakTime: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        lastSessionDate: null,
+      },
+    });
+    console.log("User profile successfully created in Firestore");
+  } catch (error) {
+    console.error("Error creating user profile:", error);
+    throw error;
+  }
 };
 
 // Get user stats from Firestore
@@ -124,12 +131,10 @@ export const saveUserSettings = async (uid, settings) => {
 
 // Load user settings from Firestore
 export const loadUserSettings = async (uid) => {
-  console.log("loadUserSettings called with uid:", uid);
   const docRef = doc(db, "users", uid);
 
   try {
     const docSnap = await getDoc(docRef);
-    console.log("Firestore doc retrieved:", docSnap.exists(), docSnap.data());
 
     if (docSnap.exists() && docSnap.data().settings) {
       console.log("Settings loaded from Firestore:", docSnap.data().settings);

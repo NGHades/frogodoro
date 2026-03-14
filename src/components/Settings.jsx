@@ -117,11 +117,15 @@ export default function Settings({
       }
       try {
         const result = await signup(email, password);
+        console.log("Signup successful, user UID:", result.user.uid);
         await createUserProfile(result.user.uid, email);
+        console.log("User profile created in Firestore");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+        setAccountMode("login"); // Switch back to login mode after successful signup
       } catch (err) {
+        console.error("Signup or profile creation error:", err);
         setAuthError(err.message);
       }
     }
