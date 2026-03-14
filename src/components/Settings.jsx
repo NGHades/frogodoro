@@ -539,7 +539,7 @@ export default function Settings({
 
                       <button
                         type="submit"
-                        className="w-full bg-green-500 text-white font-medium py-2 rounded-lg hover:bg-green-600 transition-colors"
+                        className="w-full bg-frogGreen text-white font-medium py-2 rounded-lg hover:bg-green-600 transition-colors"
                       >
                         {accountMode === "login" ? "Login" : "Sign Up"}
                       </button>
@@ -561,7 +561,7 @@ export default function Settings({
                           setPassword("");
                           setConfirmPassword("");
                         }}
-                        className="text-green-500 hover:underline font-medium"
+                        className="text-frogGreen hover:underline font-medium"
                       >
                         {accountMode === "login"
                           ? "Sign up here"
