@@ -53,24 +53,19 @@ export default function Timer() {
         .then((firebaseSettings) => {
           console.log("Loaded settings from Firestore:", firebaseSettings);
           if (firebaseSettings) {
-            // Firestore has settings, use them
-            console.log("Using Firestore settings");
+            // Firestore has settings, use them and update localStorage
             setTimerSettings(firebaseSettings);
             setTime(firebaseSettings.pomodoroTime * 60);
           } else {
             // Firestore has no settings, use localStorage fallback
-            console.log("No Firestore settings, using localStorage");
             const localSettings = loadTimerSettings();
-            setTimerSettings(localSettings);
             setTime(localSettings.pomodoroTime * 60);
           }
         })
         .catch((error) => {
-          console.error("Failed to load settings from Firestore:", error);
+          console.error("Failed to load settings:", error);
           // Fallback to localStorage on error
-          console.log("Firestore error, using localStorage fallback");
           const localSettings = loadTimerSettings();
-          setTimerSettings(localSettings);
           setTime(localSettings.pomodoroTime * 60);
         });
     }
@@ -149,7 +144,19 @@ export default function Timer() {
           setIsRunning(true);
         }
       } else if (mode === "shortBreak" || mode === "longBreak") {
-        // Break completed, switch to focus
+        // Break completed, record break time to Firestore
+        const breakTime =
+          mode === "shortBreak"
+            ? timerSettings.shortBreakTime
+            : timerSettings.longBreakTime;
+
+        if (currentUser) {
+          recordSessionCompletion(currentUser.uid, 0, breakTime).catch(
+            (error) => console.error("Failed to record break:", error),
+          );
+        }
+
+        // Switch back to focus mode
         const nextTime = timerSettings.pomodoroTime * 60;
         setMode("focus");
         setTime(nextTime);

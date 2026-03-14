@@ -10,33 +10,26 @@ import { db } from "../components/firebaseConfig";
 
 // Create user profile in Firestore when they sign up
 export const createUserProfile = async (uid, email) => {
-  console.log("Creating user profile for UID:", uid, "Email:", email);
-  try {
-    await setDoc(doc(db, "users", uid), {
-      email,
-      createdAt: new Date(),
-      settings: {
-        pomodoroTime: 25,
-        shortBreakTime: 5,
-        longBreakTime: 15,
-        autoStartPomodoros: false,
-        autoStartBreaks: false,
-        background: "riverLandscape",
-      },
-      stats: {
-        sessionsCompleted: 0,
-        totalFocusTime: 0, // in minutes
-        totalBreakTime: 0,
-        currentStreak: 0,
-        longestStreak: 0,
-        lastSessionDate: null,
-      },
-    });
-    console.log("User profile successfully created in Firestore");
-  } catch (error) {
-    console.error("Error creating user profile:", error);
-    throw error;
-  }
+  await setDoc(doc(db, "users", uid), {
+    email,
+    createdAt: new Date(),
+    settings: {
+      pomodoroTime: 25,
+      shortBreakTime: 5,
+      longBreakTime: 15,
+      autoStartPomodoros: false,
+      autoStartBreaks: false,
+      background: "riverLandscape",
+    },
+    stats: {
+      sessionsCompleted: 0,
+      totalFocusTime: 0, // in minutes
+      totalBreakTime: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      lastSessionDate: null,
+    },
+  });
 };
 
 // Get user stats from Firestore
@@ -80,6 +73,9 @@ export const recordSessionCompletion = async (uid, focusTime, breakTime) => {
       ),
       "stats.lastSessionDate": today,
     });
+    console.log(
+      `Stats updated: +${focusTime}min focus, +${breakTime}min break, ${isNewDay ? "streak +1" : "streak same day"}`,
+    );
   } catch (error) {
     console.error("Error recording session:", error);
     throw error;
