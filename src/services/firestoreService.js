@@ -10,6 +10,12 @@ import { db } from "../components/firebaseConfig";
 
 // Create user profile in Firestore when they sign up
 export const createUserProfile = async (uid, email) => {
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new Error("Invalid email format");
+  }
+
   await setDoc(doc(db, "users", uid), {
     email,
     createdAt: new Date(),

@@ -15,6 +15,11 @@ export function AuthProvider({ children }) {
 
   // Sign up with email and password
   const signup = (email, password) => {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return Promise.reject(new Error("Please enter a valid email address"));
+    }
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
