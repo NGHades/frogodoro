@@ -268,7 +268,7 @@ export default function Timer() {
 
   return (
     <div className="font-jersey flex flex-col items-center">
-      <div className="flex flex-row justify-center gap-4 mb-6">
+      <div className="flex flex-row justify-center gap-4">
         <PomodoroButton currentMode={mode} onModeChange={handleModeChange} />
         <ShortBreakButton currentMode={mode} onModeChange={handleModeChange} />
         <LongBreakButton currentMode={mode} onModeChange={handleModeChange} />
@@ -280,7 +280,7 @@ export default function Timer() {
           className="w-32 h-32 object-cover object-top"
         />
       </div>
-      <div className="w-75 h-75 mx-auto">
+      <div className="w-65 h-65 mx-auto">
         <CircularProgressbar
           value={countdown()}
           text={formatTime()}
@@ -288,11 +288,11 @@ export default function Timer() {
             textColor: "#373737",
             pathColor: "#58AF79",
             trailColor: "#FFFFFF",
-            textSize: "32px",
+            textSize: "24px",
           })}
         />
       </div>
-      <div className="flex flex-row justify-center gap-4 py-16">
+      <div className="flex flex-row justify-center gap-4 py-8">
         <PlayButton
           isPlaying={isRunning}
           onClick={() => setIsRunning(!isRunning)}

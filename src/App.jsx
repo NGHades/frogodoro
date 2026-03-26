@@ -119,7 +119,7 @@ function App() {
               ODORO
             </div>
           </h1>
-          <div className="bg-white/50 rounded-xl p-6 md:p-8 shadow-lg w-full max-w-md min-h-80 flex flex-col items-center justify-center gap-6">
+          <div className="bg-white/50 rounded-xl p-6 md:p-8 shadow-lg w-full max-w-md flex flex-col items-center justify-center gap-6">
             <Timer />
           </div>
         </div>
