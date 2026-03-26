@@ -12,6 +12,7 @@ import LongBreakButton from "./LongBreakButton";
 import frogJump from "../assets/frog-jump.gif";
 import frogIdle from "../assets/frog-idle.gif";
 import { AuthContext } from "../context/AuthContext";
+import useSound from "use-sound";
 import {
   recordSessionCompletion,
   loadUserSettings,
