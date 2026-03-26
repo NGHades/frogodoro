@@ -11,8 +11,9 @@ import ShortBreakButton from "./ShortBreakButton";
 import LongBreakButton from "./LongBreakButton";
 import frogJump from "../assets/frog-jump.gif";
 import frogIdle from "../assets/frog-idle.gif";
+import lofiMusic from "../assets/music/lofidreams-lofi-jazz-music-485312.mp3";
+import lofiBreakMusic from "../assets/music/lofi_music_library-coffee-lofi-chill-lofi-ambient-458901.mp3";
 import { AuthContext } from "../context/AuthContext";
-import useSound from "use-sound";
 import {
   recordSessionCompletion,
   loadUserSettings,
@@ -38,9 +39,20 @@ export default function Timer() {
   const [timerSettings, setTimerSettings] = useState(loadTimerSettings);
   const [time, setTime] = useState(timerSettings.pomodoroTime * 60);
   const [isRunning, setIsRunning] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const [mode, setMode] = useState("focus");
   const [cycles, setCycles] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+  const focusAudio = useState(() => {
+    const a = new Audio(lofiMusic);
+    a.loop = true;
+    return a;
+  })[0];
+  const breakAudio = useState(() => {
+    const a = new Audio(lofiBreakMusic);
+    a.loop = true;
+    return a;
+  })[0];
 
   // Save settings to localStorage whenever they change
   useEffect(() => {
@@ -111,6 +123,22 @@ export default function Timer() {
 
     return () => clearInterval(interval);
   }, [isRunning]);
+
+  // Play/pause lofi music when timer starts/stops or when muted based on mode
+  useEffect(() => {
+    if (isRunning && !isMuted) {
+      if (mode === "focus") {
+        focusAudio.play().catch((error) => console.error("Failed to play music:", error));
+        breakAudio.pause();
+      } else {
+        breakAudio.play().catch((error) => console.error("Failed to play music:", error));
+        focusAudio.pause();
+      }
+    } else {
+      focusAudio.pause();
+      breakAudio.pause();
+    }
+  }, [isRunning, isMuted, mode, focusAudio, breakAudio]);
 
   // Handle auto-starting next session when timer completes
   useEffect(() => {
@@ -270,7 +298,7 @@ export default function Timer() {
           onClick={() => setIsRunning(!isRunning)}
         />
         <RefreshButton onClick={reset} />
-        <VolumeButton />
+        <VolumeButton onClick={() => setIsMuted(!isMuted)}/>
         <SettingsButton onClick={() => setShowSettings(true)} />
       </div>
       {showSettings && (
