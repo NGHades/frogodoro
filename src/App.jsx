@@ -10,11 +10,10 @@ import vivarium from "./assets/backgrounds/vivarium.gif";
 import sunsetLake from "./assets/backgrounds/sunsetLake.gif";
 import waterfall from "./assets/backgrounds/waterfall.gif";
 import desert from "./assets/backgrounds/desert.gif";
-import { useState, createContext, useEffect, useContext } from "react";
-import { AuthContext } from "./context/AuthContext";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "./context/authContextObject";
+import { BackgroundContext } from "./context/BackgroundContext";
 import { loadUserSettings } from "./services/firestoreService";
-
-export const BackgroundContext = createContext();
 
 function App() {
   const { currentUser } = useContext(AuthContext);

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/authContextObject";
 import { createUserProfile } from "../services/firestoreService";
 
 export default function Signup({ onSignupSuccess, onSwitchToLogin }) {

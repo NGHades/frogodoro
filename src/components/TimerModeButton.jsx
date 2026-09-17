@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function TimerModeButton({ mode, currentMode, onModeChange, children, className = "" }) {
   const isActive = mode === currentMode;
   

@@ -13,7 +13,7 @@ import frogJump from "../assets/frog-jump.gif";
 import frogIdle from "../assets/frog-idle.gif";
 import lofiMusic from "../assets/music/lofidreams-lofi-jazz-music-485312.mp3";
 import lofiBreakMusic from "../assets/music/lofi_music_library-coffee-lofi-chill-lofi-ambient-458901.mp3";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/authContextObject";
 import {
   recordSessionCompletion,
   loadUserSettings,

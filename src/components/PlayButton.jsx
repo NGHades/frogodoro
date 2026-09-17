@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function PlayButton({ isPlaying, onClick, ...props }) {
   const handleClick = () => {
     // Call the parent's onClick if provided

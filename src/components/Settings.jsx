@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import profileFrog from "../assets/profileFrog.svg";
 import profileFrogGray from "../assets/profileFrog-gray.svg";
-import { BackgroundContext } from "../App";
-import { AuthContext } from "../context/AuthContext";
+import { BackgroundContext } from "../context/BackgroundContext";
+import { AuthContext } from "../context/authContextObject";
 import {
   createUserProfile,
   saveUserSettings,
@@ -11,7 +11,6 @@ import {
 
 export default function Settings({
   currentSettings,
-  onClose,
   onSettingsUpdate,
 }) {
   const { background, setBackground, backgroundsData } =
