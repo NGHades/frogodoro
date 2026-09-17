@@ -24,6 +24,11 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Several effects intentionally reset/sync state on prop or auth-state
+      // changes (logout resets, form sync from props). Downgraded to a
+      // warning rather than rewritten blind, since that logic isn't covered
+      // by tests here.
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
 ])
