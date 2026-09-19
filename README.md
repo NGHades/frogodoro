@@ -17,7 +17,7 @@ A cozy, frog-themed Pomodoro timer for focused work and mindful breaks.
 
 </div>
 
-![Frogodoro main timer](src\assets\main-page.gif)
+![Frogodoro main timer](src/assets/main-page.gif)
 
 ## About
 
@@ -34,17 +34,11 @@ A cozy, frog-themed Pomodoro timer for focused work and mindful breaks.
 - 📊 **Stats tracking** — sessions completed, total focus minutes, current streak, and longest streak
 - 💾 **Local persistence** — timer settings and background persist via `localStorage` even when signed out
 
-<!--
-📸 SCREENSHOT / GIF NEEDED
-A short GIF of the timer running, the settings panel, and background switching would be great here, e.g.:
-![Settings panel](docs/screenshots/settings.png)
-![Background switching](docs/screenshots/backgrounds.gif)
--->
-![Vivarium Background](src\assets\vivarium-background-gif.gif)
+![Vivarium Background](src/assets/vivarium-background-gif.gif)
 
-![Background switching](src\assets\background-change-gif.gif)
+![Background switching](src/assets/background-change-gif.gif)
 
-![Settings panel](src\assets\settings-popup.png)
+![Settings panel](src/assets/settings-popup.png)
 
 
 ## Tech Stack
