@@ -25,14 +25,14 @@ A cozy, frog-themed Pomodoro timer for focused work and mindful breaks.
 
 ## Features
 
-- ⏱️ **Pomodoro timer** — configurable focus, short break, and long break durations
-- 🐸 **Animated frog companion** — idles and hops along as your session runs
-- 🎵 **Lo-fi background music** — separate tracks for focus and break modes, with mute control
-- 🌄 **Selectable backgrounds** — river landscape, koi pond, vivarium, sunset lake, waterfall, and desert scenes
-- 🔁 **Auto-start** — optionally auto-start the next break or pomodoro when a session ends
-- 🔐 **Account sync (Firebase)** — sign up / log in to save your settings and background choice across devices
-- 📊 **Stats tracking** — sessions completed, total focus minutes, current streak, and longest streak
-- 💾 **Local persistence** — timer settings and background persist via `localStorage` even when signed out
+- **Pomodoro timer** — configurable focus, short break, and long break durations
+- **Animated frog companion** — idles and hops along as your session runs
+- **Lo-fi background music** — separate tracks for focus and break modes, with mute control
+- **Selectable backgrounds** — river landscape, koi pond, vivarium, sunset lake, waterfall, and desert scenes
+- **Auto-start** — optionally auto-start the next break or pomodoro when a session ends
+- **Account sync (Firebase)** — sign up / log in to save your settings and background choice across devices
+- **Stats tracking** — sessions completed, total focus minutes, current streak, and longest streak
+- **Local persistence** — timer settings and background persist via `localStorage` even when signed out
 
 ![Vivarium Background](src/assets/vivarium-background-gif.gif)
 
